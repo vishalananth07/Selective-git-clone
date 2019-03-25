@@ -2,6 +2,8 @@ from argparse import ArgumentParser
 import re
 import requests
 import os
+
+
 def getInput():
 	parser = ArgumentParser()
 	parser.add_argument("-u", "--url",required=True)
@@ -16,13 +18,6 @@ def getInput():
 	if path == None:
 		path = ""
 	return (username,repo,path,flag)
-	# git_url = input("Repository : ");
-	# git_url_header = "https://github.com/"
-	# git_url = git_url.replace(git_url_header,'')
-	# username = git_url[0:git_url.find('/')]
-	# repository_name = git_url[git_url.find('/')+1:]
-	# repository_name = repository_name.replace('.git','')
-	# return (username,repository_name)
 
 def constructURL(repository_details):
 	api_url = "https://api.github.com/repos/"
@@ -40,7 +35,7 @@ def createStructure(cur_api_url,cur_directory_url,skeletal_flag):
 		print(resp.url)
 		quit()
 	data = resp.json()
-	# print(data)
+
 	if 'name' in data:
 		os.system("touch " + cur_directory_url)
 		if skeletal_flag == 0:
@@ -48,10 +43,8 @@ def createStructure(cur_api_url,cur_directory_url,skeletal_flag):
 		return
 	for i in data:
 		if i['type'] == 'file':
-			# print(i)
 			os.system("touch " + cur_directory_url + i['name'])
 			if not skeletal_flag:
-				# print(i)
 				saveFile(i['download_url'],cur_directory_url + i['name'])
 		elif i['type'] == 'dir':
 			os.system("mkdir -p " + cur_directory_url + i['name'])
