@@ -9,15 +9,19 @@ def getInput():
 	parser.add_argument("-u", "--url",required=True)
 	parser.add_argument("-p", "--path")
 	parser.add_argument("-s", "--skeleton",action='store_true')
+	parser.add_argument("-b", "--branch")
 	args = parser.parse_args()
 
 	username = re.split(r'\/',args.url)[3]
 	repo = re.split(r'\.',re.split(r'\/',args.url)[4])[0]
 	path = args.path
 	flag = args.skeleton
+	branch = args.branch
 	if path == None:
 		path = ""
-	return (username,repo,path,flag)
+	if branch == None:
+		branch = "master"
+	return (username,repo,path,flag,branch)
 
 def constructURL(repository_details):
 	api_url = "https://api.github.com/repos/"
@@ -28,8 +32,9 @@ def constructURL(repository_details):
 def saveFile(url,filepath):                
 	page = requests.get(url)
 	open(filepath, 'wb').write(page.content)
-def createStructure(cur_api_url,cur_directory_url,skeletal_flag):
-	resp = requests.get(cur_api_url)
+def createStructure(cur_api_url,cur_directory_url,skeletal_flag,branch):
+	payload = {"ref" : branch}
+	resp = requests.get(cur_api_url,params=payload)
 	if resp.status_code<200 or resp.status_code>299:
 		print("Error in Request")
 		print(resp.url)
@@ -48,13 +53,14 @@ def createStructure(cur_api_url,cur_directory_url,skeletal_flag):
 				saveFile(i['download_url'],cur_directory_url + i['name'])
 		elif i['type'] == 'dir':
 			os.system("mkdir -p " + cur_directory_url + i['name'])
-			createStructure(cur_api_url + i['name'] + "/",cur_directory_url + i['name'] + "/",skeletal_flag)
+			createStructure(cur_api_url + i['name'] + "/",cur_directory_url + i['name'] + "/",skeletal_flag,branch)
 
 def main():
 	repository_details = getInput()
 	api_url = constructURL(repository_details)
 	folder_directory = repository_details[2]
 	skele_flag = repository_details[3]
+	branch_name = repository_details[4]
 	i = len(folder_directory) - 1
 	while i>0:
 		if folder_directory[i]=='/':
@@ -64,7 +70,7 @@ def main():
 		os.system("mkdir -p "+repository_details[1] + "/" + folder_directory)
 	else:
 		os.system("mkdir -p "+repository_details[1] + "/" + folder_directory[0:i])
-	createStructure(api_url + folder_directory , repository_details[1] + "/" + folder_directory,skele_flag)
+	createStructure(api_url + folder_directory , repository_details[1] + "/" + folder_directory,skele_flag,branch_name)
 
 if __name__ == "__main__":
 	main()
