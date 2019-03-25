@@ -33,5 +33,4 @@ python3 cloneSelective.py -u <Github_Repository_URL> [-p FolderPath] [-s]
 ```
 
 ## Constraints and Requirements:
-* Script can only pull from master branch
 * Folder names must end with a / while File names should not incase -p is specified
