@@ -7,8 +7,9 @@ Run the script with
 python3 cloneSelective.py -u <Github_Repository_URL> [-p FolderPath] [-s]
 ```
 * -u : Specify the URL of repository to clone from  
-* -p : Specify required folder to clone and not any other folder  
-* -s : Specify if files need not be downloaded and only structure is needed
+* -p : Specify required file/folder to selectively clone, If the option is not specified the entire repository is cloned
+* -s : Clone the specified file/folder but create empty directories/files for other things in the repository for future use.
+* -b : Specify the branch to clone, If the option is not specified the master branch is chosen
 
 ### Clone a folder
 ```
@@ -22,6 +23,10 @@ python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -p Form
 ```
 python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree
 ```
+### Clone a different branch
+```
+python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -b alternate
+```
 ## Requirements
 * Requests
 
@@ -31,6 +36,3 @@ git clone https://github.com/vishalananth07/Selective-git-clone
 pip install -r "requirements.txt"
 python3 cloneSelective.py -u <Github_Repository_URL> [-p FolderPath] [-s]
 ```
-
-## Constraints and Requirements:
-* Folder names must end with a / while File names should not incase -p is specified
