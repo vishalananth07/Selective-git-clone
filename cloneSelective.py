@@ -42,20 +42,27 @@ def createStructure(cur_api_url,cur_directory_url,skeletal_flag,branch):
 		print(resp.url)
 		quit()
 	data = resp.json()
-
 	if 'name' in data:
-		os.system("touch " + cur_directory_url)
+		it = len(cur_directory_url) -1
+		while True:
+			if cur_directory_url[it]=='/':
+				break
+			if it==0:
+				break
+			it = it - 1
+		fin_url = cur_directory_url[0:it+1] + "'" + cur_directory_url[it+1:] + "'"
+		os.system("touch " + fin_url)
 		if skeletal_flag == 0:
 			saveFile(data['download_url'],cur_directory_url)
 		return
 	for i in data:
 		if i['type'] == 'file':
-			os.system("touch " + cur_directory_url + i['name'])
+			os.system("touch " + cur_directory_url + "'" +i['name'] + "'")
 			if not skeletal_flag:
 				saveFile(i['download_url'],cur_directory_url + i['name'])
 		elif i['type'] == 'dir':
-			os.system("mkdir -p " + cur_directory_url + i['name'])
-			createStructure(cur_api_url + i['name'] + "/",cur_directory_url + i['name'] + "/",skeletal_flag,branch)
+			os.system("mkdir -p " + cur_directory_url + "'" + i['name'] + "'")
+			createStructure(cur_api_url + i['name'] + "/",cur_directory_url + "'" +  i['name']+ "'" + "/",skeletal_flag,branch)
 
 def main():
 	repository_details = getInput()
