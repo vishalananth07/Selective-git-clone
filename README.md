@@ -4,12 +4,13 @@ A python script which clones a github repository's structure from root of reposi
 ## Running the Script
 Run the script with
 ```
-python3 cloneSelective.py -u <Github_Repository_URL> [-p FolderPath] [-s] [-b]
+python3 cloneSelective.py -u <Github_Repository_URL> [-p Folder_Path] [-s] [-b Branch_Name] [-d]
 ```
 * -u : Specify the URL of repository to clone from  
 * -p : Specify required file/folder to selectively clone, If the option is not specified the entire repository is cloned
-* -s : Clone the specified file/folder but create empty directories/files for other things in the repository for future use.
+* -s : Clone the specified file/folder but create empty directories/files for other things in the repository for future use
 * -b : Specify the branch to clone, If the option is not specified the master branch is chosen
+* -d : Clones the folder mentioned in -p directly to root directory instead of maintaining directory structure
 
 ### Clone a folder
 ```

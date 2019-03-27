@@ -10,6 +10,7 @@ def getInput():
 	parser.add_argument("-p", "--path")
 	parser.add_argument("-s", "--skeleton",action='store_true')
 	parser.add_argument("-b", "--branch")
+	parser.add_argument("-d", "--direct",action='store_true')
 	args = parser.parse_args()
 
 	username = re.split(r'\/',args.url)[3]
@@ -17,11 +18,12 @@ def getInput():
 	path = args.path
 	flag = args.skeleton
 	branch = args.branch
+	direct = args.direct
 	if path == None:
 		path = ""
 	if branch == None:
 		branch = "master"
-	return (username,repo,path,flag,branch)
+	return (username,repo,path,flag,branch,direct)
 
 def constructURL(repository_details):
 	api_url = "https://api.github.com/repos/"
@@ -61,16 +63,35 @@ def main():
 	folder_directory = repository_details[2]
 	skele_flag = repository_details[3]
 	branch_name = repository_details[4]
+	direct_flag = repository_details[5]
 	i = len(folder_directory) - 1
 	while i>0:
 		if folder_directory[i]=='/':
 			break
 		i = i - 1
-	if folder_directory == "" or folder_directory[len(folder_directory)-1] == '/':
-		os.system("mkdir -p "+repository_details[1] + "/" + folder_directory)
+	if not direct_flag:
+		if folder_directory == "" or folder_directory[len(folder_directory)-1] == '/':
+			os.system("mkdir -p "+repository_details[1] + "/" + folder_directory)
+		else:
+			os.system("mkdir -p "+repository_details[1] + "/" + folder_directory[0:i])
+		createStructure(api_url + folder_directory , repository_details[1] + "/" + folder_directory,skele_flag,branch_name)
 	else:
-		os.system("mkdir -p "+repository_details[1] + "/" + folder_directory[0:i])
-	createStructure(api_url + folder_directory , repository_details[1] + "/" + folder_directory,skele_flag,branch_name)
+		if folder_directory[-1] == '/':
+			os.system("mkdir -p "+repository_details[1])
+			createStructure(api_url + folder_directory , repository_details[1] + "/",skele_flag,branch_name)
+		else:
+			it = len(folder_directory) - 1
+			while True:
+				if folder_directory[it]=='/':
+					it = it + 1
+					break
+				elif it == 0:
+					break
+				it = it - 1
+			file_name = folder_directory[it:]
+			os.system("mkdir -p "+repository_details[1])
+			os.system("touch " + repository_details[1]+"/"+file_name)
+			createStructure(api_url + folder_directory, repository_details[1] + "/" + file_name,skele_flag,branch_name)
 
 if __name__ == "__main__":
 	main()
