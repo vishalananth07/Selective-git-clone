@@ -8,17 +8,17 @@ python3 cloneSelective.py -u <Github_Repository_URL> [-p Folder_Path] [-s] [-b B
 ```
 * -u : Specify the URL of repository to clone from  
 * -p : Specify required file/folder to selectively clone, If the option is not specified the entire repository is cloned
-* -s : Clone the specified file/folder but create empty directories/files for other things in the repository for future use
 * -b : Specify the branch to clone, If the option is not specified the master branch is chosen
-* -d : Clones the folder mentioned in -p directly to root directory instead of maintaining directory structure
+* -d : Clones only the file/folder mentioned in -p directly without creating the parent directories or other files
+* -s : Clone the specified file/folder but create empty directories/files for other things in the repository for future use
 
 ### Clone a folder
 ```
-python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -p FormulaTree/ 
+python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -p FormulaTree/ -d
 ```
 ### Clone a file
 ```
-python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -p FormulaTree/Formula.cpp
+python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -p FormulaTree/Formula.cpp -d
 ```
 ### Clone full repository
 ```
@@ -26,7 +26,7 @@ python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree
 ```
 ### Clone a different branch
 ```
-python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -b alternate
+python3 cloneSelective.py -u https://github.com/anishbadhri/Formula_Tree -b alternate -d
 ```
 ## Requirements
 * Requests
